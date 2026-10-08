@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17304b">
+  <meta name="description" content="Chiếc hộp của ngày mai — truyện tranh tương tác về Việt Nam năm 2121.">
+  <title>Chiếc hộp của ngày mai | Truyện tranh tương tác</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script defer src="./story-data.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#comicStage">Bỏ qua phần giới thiệu</a>
+
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="#trang-1" aria-label="Về trang đầu truyện">
+        <span class="brand-symbol" aria-hidden="true">✦</span>
+        <span>CHUYỆN 2121</span>
+      </a>
+      <div class="header-right">
+        <span class="header-note">Một câu chuyện · ba dấu vết</span>
+        <button class="icon-button info-trigger" type="button" id="aboutButton" aria-label="Giới thiệu truyện">i</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro" aria-label="Giới thiệu truyện">
+        <div class="intro-copy">
+          <span class="eyebrow"><span class="eyebrow-line"></span> VIỆT NAM · NĂM 2121</span>
+          <h1>Chiếc hộp<br><em>của ngày mai</em></h1>
+          <p>Hoa, Trung và Mây lần theo ba món đồ thất lạc. Mỗi dấu vết mở ra một câu chuyện có thật từ quá khứ.</p>
+          <div class="intro-meta">
+            <span>09 trang truyện</span>
+            <span class="meta-dot" aria-hidden="true"></span>
+            <span>03 thẻ tư liệu</span>
+            <span class="meta-dot" aria-hidden="true"></span>
+            <span>Đọc bằng tiếng Việt</span>
+          </div>
+        </div>
+        <div class="intro-decoration" aria-hidden="true">
+          <div class="deco-ring deco-ring-one"></div>
+          <div class="deco-ring deco-ring-two"></div>
+          <div class="deco-box"><span>?</span></div>
+          <span class="deco-spark deco-spark-one">✦</span>
+          <span class="deco-spark deco-spark-two">✳</span>
+          <span class="deco-label">MỘT CHIẾC HỘP<br>BA CÂU CHUYỆN</span>
+        </div>
+      </section>
+
+      <section class="reader" aria-labelledby="readerTitle">
+        <div class="reader-heading">
+          <div>
+            <span class="section-kicker">BẮT ĐẦU KHÁM PHÁ</span>
+            <h2 id="readerTitle">Trang truyện</h2>
+          </div>
+          <p>Di chuột lên dấu <span class="inline-discovery" aria-hidden="true">✧</span> để xem trước. Chạm hoặc nhấp để mở tư liệu; bấm <strong>Nghe kể</strong> nếu muốn nghe âm thanh.</p>
+        </div>
+
+        <div class="reader-toolbar" aria-label="Điều hướng truyện">
+          <div class="page-count"><span id="currentPage">01</span><span class="page-divider">/</span><span id="totalPages">09</span></div>
+          <div class="progress-track" role="progressbar" aria-label="Tiến độ đọc truyện" aria-valuemin="1" aria-valuemax="9" aria-valuenow="1" id="progressBar">
+            <span id="progressFill"></span>
+          </div>
+          <span class="toolbar-hint">Dùng phím ← → để đổi trang</span>
+        </div>
+
+        <div id="comicStage" class="comic-stage" tabindex="-1" aria-live="polite"></div>
+
+        <nav class="reader-navigation" aria-label="Chuyển trang">
+          <button class="nav-button nav-previous" type="button" id="previousPage"><span aria-hidden="true">←</span> Trang trước</button>
+          <div class="page-dots" id="pageDots" aria-label="Chọn trang"></div>
+          <button class="nav-button nav-next" type="button" id="nextPage">Trang tiếp <span aria-hidden="true">→</span></button>
+        </nav>
+      </section>
+
+      <section class="afterword" aria-label="Lời kết">
+        <div class="afterword-symbol" aria-hidden="true">✦</div>
+        <div>
+          <span class="section-kicker">LỜI NHẮN TỪ CHIẾC HỘP</span>
+          <p>Quá khứ để lại những câu chuyện. Chúng mình sẽ viết tiếp điều gì cho ngày mai?</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>Chiếc hộp của ngày mai · Truyện tranh giáo dục hư cấu năm 2121</span>
+      <span>Các thẻ lịch sử dẫn tới nguồn tư liệu được ghi rõ trong truyện.</span>
+    </footer>
+  </div>
+
+  <dialog class="history-dialog" id="historyDialog" aria-labelledby="historyTitle">
+    <div class="dialog-topline">
+      <span class="dialog-kicker">HỒ SƠ TƯ LIỆU <span id="historyNumber"></span></span>
+      <button type="button" class="dialog-close" id="closeHistory" aria-label="Đóng thẻ tư liệu">×</button>
+    </div>
+    <div class="dialog-body">
+      <div class="dialog-visual" id="historyVisual" aria-hidden="true">
+        <span class="dialog-visual-symbol" id="historySymbol"></span>
+        <span class="dialog-visual-label" id="historyVisualLabel"></span>
+      </div>
+      <div class="dialog-content">
+        <span class="history-place" id="historyPlace"></span>
+        <h2 id="historyTitle"></h2>
+        <p class="history-lead" id="historyLead"></p>
+        <div class="history-facts" id="historyFacts"></div>
+        <p class="history-fiction-note">Khung truyện năm 2121 là viễn tưởng. Các mốc lịch sử trong thẻ này dựa trên nguồn ghi bên dưới.</p>
+        <div class="source-list" id="historySources"></div>
+        <div class="dialog-audio">
+          <button type="button" class="audio-button" id="audioButton"><span aria-hidden="true">◖))</span> Nghe kể</button>
+          <span id="audioStatus" class="audio-status" role="status" aria-live="polite">Âm thanh chỉ phát khi bạn chọn.</span>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="about-dialog" id="aboutDialog" aria-labelledby="aboutTitle">
+    <div class="dialog-topline">
+      <span class="dialog-kicker">VỀ TRUYỆN</span>
+      <button type="button" class="dialog-close" id="closeAbout" aria-label="Đóng giới thiệu">×</button>
+    </div>
+    <div class="about-body">
+      <h2 id="aboutTitle">Chiếc hộp của ngày mai</h2>
+      <p>Hoa, Trung, Mây và bác An là nhân vật hư cấu. Địa điểm và sự kiện lịch sử trong các thẻ tư liệu được tách khỏi bối cảnh tưởng tượng năm 2121.</p>
+      <p>Các khung màu hiện là vị trí giữ chỗ cho hình minh họa. Hình ảnh có thể được thêm sau mà vẫn giữ nguyên lời thoại và điểm tương tác.</p>
+      <p>Âm thanh dùng tệp do nhóm cung cấp khi có, hoặc giọng đọc tiếng Việt của trình duyệt. Lời kể luôn có bản chữ đi kèm.</p>
+    </div>
+  </dialog>
+
+  <noscript><p class="noscript-note">Trình đọc truyện cần JavaScript để chuyển trang và mở thẻ tư liệu.</p></noscript>
+</body>
+</html>
