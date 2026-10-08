@@ -1,6 +1,6 @@
 # Comic web reader — Chiếc hộp của ngày mai
 
-This directory contains the local, buildless comic reader from [comic-run-plan.md](../comic-run-plan.md). All audience-facing text is Vietnamese. The web app currently uses CSS placeholders; **no images were generated or downloaded**.
+This directory contains the local, buildless comic reader from [comic-run-plan.md](../comic-run-plan.md). All 20 story panels now have local illustrations, and Vietnamese dialogue is layered as editable text for screen readers and print.
 
 ## Open it
 
@@ -9,21 +9,17 @@ Open dist/index.html in a current browser. The site has no package installation 
 Files:
 
 - dist/index.html: reader shell and the two dialogs.
-- dist/story-data.js: nine pages, 20 panel records, three fact cards and source URLs.
+- dist/story-data.js: nine pages, 20 illustrated panel records, three fact cards and source URLs.
 - dist/app.js: page navigation, history hotspots, dialogs, source links, audio and print content.
 - dist/styles.css: responsive layout, CSS art placeholders and A4 print layout.
-- dist/assets/images/: add your panel illustrations here.
+- dist/assets/images/: panel illustrations in WebP, plus the original vector illustration for P07B.
 - dist/assets/audio/: add your own or rights-cleared narration here.
 
-## Add panel images later
+## Panel art and dialogue
 
-For each panel, change its image value from null in dist/story-data.js to a relative URL. For example:
+The P01A–P09C image values point to local files under dist/assets/images/. Dialogue remains in dist/story-data.js and is positioned over each image with captionBox percentages measured from the top-left of the 16:9 artwork. This keeps Vietnamese text crisp and selectable. The P07B vector artwork is an original, text-free diagram linking the three clue objects.
 
-~~~js
-{ id: "P03B", image: "./assets/images/P03B.webp", ... }
-~~~
-
-Keep the panel ID and visual text. The visual text becomes the image's alternative text. Images fill their frames with object-fit: cover, so keep important characters and objects away from crop edges. The artHint is shown only while the image is missing or fails to load.
+Keep panel IDs and the visual description when replacing an illustration. The visual description becomes its alternative text. Images fill their frames with object-fit: cover, so keep important characters and objects away from crop edges. The artHint appears only while an image is missing or fails to load.
 
 History cards open from both the setting panels and the object panels: P03A/P03B (Đông Hồ), P05A/P05B (Ba Đình) and P07A/P07B (Văn Miếu). The setting panels have a full-image hotspot with a visible **Xem tư liệu** badge. The object panels have hotspot rectangles with x, y, w, h as percentages of the panel. After adding art, adjust the object hotspot coordinates to align with the print, timeline or stele. Hover or keyboard focus shows a short sourced preview; click or tap opens the full fact card. The same card is printed only once per page in the PDF layout.
 
@@ -47,4 +43,4 @@ The Hồ Chí Minh photo proposed in the idea is represented by a blank photo/ca
 
 ## Local state
 
-This reader is a local implementation with image placeholders. It has not been published. Hosting, the contest's PDF specification and final asset permissions remain to be confirmed before submission.
+This reader is a local implementation with its illustrations and dialogue in place. It has not been published. Hosting, the contest's PDF specification and final asset permissions remain to be confirmed before submission.
