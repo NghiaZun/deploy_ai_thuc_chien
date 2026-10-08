@@ -25,7 +25,9 @@ For each panel, change its image value from null in dist/story-data.js to a rela
 
 Keep the panel ID and visual text. The visual text becomes the image's alternative text. Images fill their frames with object-fit: cover, so keep important characters and objects away from crop edges. The artHint is shown only while the image is missing or fails to load.
 
-The three historical panels are P03B (Dong Ho), P05B (Ba Đình) and P07B (Văn Miếu). Each has a hotspot rectangle with x, y, w, h as percentages of its panel. After adding art, adjust those four numbers to align the interactive area with the object in the image. Hover or keyboard focus shows a short sourced preview; click or tap opens the full fact card. On touch devices, tapping the marked object opens the card directly.
+History cards open from both the setting panels and the object panels: P03A/P03B (Đông Hồ), P05A/P05B (Ba Đình) and P07A/P07B (Văn Miếu). The setting panels have a full-image hotspot with a visible **Xem tư liệu** badge. The object panels have hotspot rectangles with x, y, w, h as percentages of the panel. After adding art, adjust the object hotspot coordinates to align with the print, timeline or stele. Hover or keyboard focus shows a short sourced preview; click or tap opens the full fact card. The same card is printed only once per page in the PDF layout.
+
+Each card separates a fictional connection to Hoa and Trung's story from historical facts and links to the official sources. The Ba Đình card keeps the 1945 Declaration at the Square separate from the Mausoleum's 1975 inauguration.
 
 ## Add audio later
 

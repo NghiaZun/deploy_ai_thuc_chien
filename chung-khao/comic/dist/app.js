@@ -58,13 +58,49 @@
     return placeholder;
   }
 
+  function setPercentBox(node, box) {
+    node.style.left = box.x + "%";
+    node.style.top = box.y + "%";
+    node.style.width = box.w + "%";
+    node.style.height = box.h + "%";
+  }
+
+  function createImageText(panel) {
+    var labels = Array.isArray(panel.overlayLabels) ? panel.overlayLabels : [];
+    if (!panel.captionBox && !labels.length) return null;
+
+    var layer = element("div", "panel-text-layer");
+    if (panel.captionBox) {
+      var captionClass = "panel-caption-box";
+      if (panel.captionBox.variant) captionClass += " panel-caption-box--" + panel.captionBox.variant;
+      if (panel.captionBox.compact) captionClass += " is-compact";
+      var caption = element("div", captionClass);
+      setPercentBox(caption, panel.captionBox);
+      if (!panel.captionBox.hideSpeaker && panel.speaker) {
+        caption.appendChild(element("span", "image-caption-speaker", panel.speaker));
+      }
+      caption.appendChild(element("p", "", panel.dialogue));
+      layer.appendChild(caption);
+    }
+
+    labels.forEach(function (label) {
+      var labelClass = "image-overlay-label";
+      if (label.variant) labelClass += " image-overlay-label--" + label.variant;
+      var node = element("span", labelClass, label.text);
+      setPercentBox(node, label);
+      layer.appendChild(node);
+    });
+    return layer;
+  }
+
   function createHistoryHotspot(panel) {
     var history = data.histories[panel.historyId];
-    if (!history) return null;
+    if (!history || !panel.hotspot) return null;
 
-    var hotspot = element("button", "history-hotspot");
+    var isLandmark = panel.hotspotKind === "landmark";
+    var hotspot = element("button", "history-hotspot" + (isLandmark ? " is-landmark" : ""));
     hotspot.type = "button";
-    hotspot.setAttribute("aria-label", "Mở tư liệu: " + history.title);
+    hotspot.setAttribute("aria-label", "Mở tư liệu về " + history.place + ": " + history.title);
     hotspot.style.left = panel.hotspot.x + "%";
     hotspot.style.top = panel.hotspot.y + "%";
     hotspot.style.width = panel.hotspot.w + "%";
@@ -73,7 +109,7 @@
     var marker = element("span", "hotspot-marker");
     marker.setAttribute("aria-hidden", "true");
     marker.textContent = "✧";
-    var cue = element("span", "hotspot-cue", "Khám phá");
+    var cue = element("span", "hotspot-cue", isLandmark ? "Xem tư liệu" : "Khám phá");
     var preview = element("span", "history-preview");
     preview.setAttribute("aria-hidden", "true");
     preview.appendChild(element("span", "history-preview-kicker", history.place));
@@ -93,6 +129,8 @@
   function createPanel(panel, index) {
     var article = element("article", "comic-panel size-" + panel.size + " scene-" + panel.scene);
     article.setAttribute("aria-label", "Khung " + (index + 1) + ": " + panel.visual);
+    if (panel.image) article.classList.add("has-image");
+    if (panel.hotspotKind === "landmark") article.classList.add("has-landmark-hotspot");
 
     var art = element("div", "panel-art");
     if (panel.image) {
@@ -110,21 +148,28 @@
     }
 
     if (panel.sign) {
-      art.appendChild(element("span", "panel-sign", panel.sign));
+      var sign = element("span", "panel-sign" + (panel.signBox ? " panel-sign--placed" : ""), panel.sign);
+      if (panel.signBox) setPercentBox(sign, panel.signBox);
+      art.appendChild(sign);
     }
     if (panel.historyId) {
       art.appendChild(createHistoryHotspot(panel));
     }
+    var imageText = createImageText(panel);
+    if (imageText) art.appendChild(imageText);
 
     var corner = element("span", "panel-corner", panel.id);
     corner.setAttribute("aria-hidden", "true");
-    var speech = element("div", "speech-bubble");
-    speech.appendChild(element("span", "speech-speaker", panel.speaker));
-    speech.appendChild(element("p", "", panel.dialogue));
+    var speech = null;
+    if (!panel.captionBox) {
+      speech = element("div", "speech-bubble");
+      speech.appendChild(element("span", "speech-speaker", panel.speaker));
+      speech.appendChild(element("p", "", panel.dialogue));
+    }
 
     article.appendChild(art);
     article.appendChild(corner);
-    article.appendChild(speech);
+    if (speech) article.appendChild(speech);
     return article;
   }
 
@@ -132,6 +177,7 @@
     var history = data.histories[historyId];
     var fact = element("aside", "print-fact");
     fact.appendChild(element("strong", "", "TƯ LIỆU · " + history.place));
+    fact.appendChild(element("p", "print-story", "Trong truyện: " + history.story));
     history.facts.forEach(function (line) {
       fact.appendChild(element("p", "", line));
     });
@@ -161,7 +207,12 @@
     });
     section.appendChild(grid);
 
-    var facts = page.panels.filter(function (panel) { return Boolean(panel.historyId); });
+    var seenHistoryIds = new Set();
+    var facts = page.panels.filter(function (panel) {
+      if (!panel.historyId || seenHistoryIds.has(panel.historyId)) return false;
+      seenHistoryIds.add(panel.historyId);
+      return true;
+    });
     if (facts.length) {
       section.classList.add("has-print-facts");
       var printFacts = element("div", "print-facts");
@@ -330,6 +381,7 @@
     document.getElementById("historyPlace").textContent = history.place;
     document.getElementById("historyTitle").textContent = history.title;
     document.getElementById("historyLead").textContent = history.lead;
+    document.getElementById("historyStory").textContent = history.story;
     document.getElementById("historySymbol").textContent = history.symbol;
     document.getElementById("historyVisualLabel").textContent = history.visualLabel;
 
