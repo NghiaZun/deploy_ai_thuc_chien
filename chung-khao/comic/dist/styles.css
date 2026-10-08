@@ -241,6 +241,14 @@ h1 em { color: var(--coral); font-style: normal; }
 .comic-panel.has-image .panel-corner { display: none; }
 .panel-art { position: absolute; inset: 0; overflow: visible; }
 .panel-image { display: block; width: 100%; height: 100%; object-fit: cover; }
+.scene-cover .panel-art::before {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(255, 253, 248, 0.96) 0%, rgba(255, 253, 248, 0.82) 30%, rgba(255, 253, 248, 0.25) 48%, transparent 60%);
+}
 .panel-corner {
   position: absolute;
   z-index: 3;
@@ -297,6 +305,17 @@ h1 em { color: var(--coral); font-style: normal; }
 .placeholder-caption { position: relative; max-width: 58%; margin-top: 0.7rem; color: var(--navy); font-size: clamp(1.05rem, 2.3vw, 2rem); line-height: 1.18; letter-spacing: -0.05em; font-weight: 900; }
 .placeholder-hint { position: relative; margin-top: 0.8rem; color: #385972; font-size: 0.67rem; font-weight: 700; letter-spacing: 0.04em; }
 .panel-sign { position: absolute; z-index: 2; right: 12%; top: 13%; padding: 0.45rem 0.7rem; border: 2px solid var(--navy); border-radius: 6px; color: var(--navy); background: rgba(255, 253, 248, 0.93); font-size: clamp(0.65rem, 1vw, 0.9rem); font-weight: 900; letter-spacing: 0.08em; transform: rotate(-3deg); }
+.panel-sign--placed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem;
+  border: 0;
+  background: transparent;
+  text-align: center;
+  line-height: 1.2;
+  transform: rotate(-1deg);
+}
 .panel-text-layer { position: absolute; z-index: 8; inset: 0; pointer-events: none; }
 .panel-caption-box {
   position: absolute;
@@ -305,14 +324,15 @@ h1 em { color: var(--coral); font-style: normal; }
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  padding: clamp(3px, 0.65vw, 10px);
+  padding: clamp(4px, 0.8vw, 11px);
   color: #142b42;
   text-align: center;
   text-wrap: pretty;
+  overflow-wrap: anywhere;
 }
 .image-caption-speaker { display: block; margin-bottom: 0.2em; color: #a33b31; font-size: clamp(8px, 0.75vw, 12px); font-weight: 900; letter-spacing: 0.06em; }
-.panel-caption-box p { margin: 0; font-size: clamp(11px, 1.12vw, 19px); font-weight: 800; line-height: 1.22; }
-.panel-caption-box.is-compact p { font-size: clamp(9px, 0.88vw, 14px); line-height: 1.15; }
+.panel-caption-box p { max-width: 100%; margin: 0; font-size: clamp(10px, 1.12vw, 18px); font-weight: 800; line-height: 1.2; }
+.panel-caption-box.is-compact p { font-size: clamp(9px, 0.92vw, 14px); line-height: 1.15; }
 .panel-caption-box--bubble {
   border: 2px solid var(--navy);
   border-radius: 15px 15px 15px 4px;
@@ -332,10 +352,36 @@ h1 em { color: var(--coral); font-style: normal; }
   line-height: 1.1;
   text-align: center;
 }
-.image-overlay-label--replace { background: #fffdf8; font-size: clamp(12px, 1.35vw, 21px); letter-spacing: 0.04em; }
+.image-overlay-label--replace { background: #fffdf8; font-size: clamp(12px, 1.25vw, 19px); letter-spacing: 0.04em; white-space: nowrap; }
 .image-overlay-label--translation { border: 1px solid rgba(23, 48, 75, 0.6); background: #eaf5f4; font-size: clamp(8px, 0.8vw, 12px); }
 .image-overlay-label--impact { border: 2px solid #17304b; border-radius: 999px; color: #17304b; background: #f3c351; font-size: clamp(9px, 1vw, 16px); font-style: italic; transform: rotate(-5deg); }
 .image-overlay-label--note { border-radius: 4px; color: #fffdf8; background: rgba(23, 48, 75, 0.86); font-size: clamp(7px, 0.62vw, 10px); letter-spacing: 0.04em; }
+.image-overlay-label--cover-main,
+.image-overlay-label--cover-accent {
+  justify-content: flex-start;
+  overflow: visible;
+  padding: 0;
+  background: transparent;
+  font-size: clamp(24px, 4.2vw, 64px);
+  font-weight: 950;
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+  text-align: left;
+  text-shadow: 0 2px 0 rgba(255, 253, 248, 0.8), 0 6px 18px rgba(23, 48, 75, 0.12);
+}
+.image-overlay-label--cover-main { color: #102f4d; }
+.image-overlay-label--cover-accent { color: #a53a31; }
+.image-overlay-label--cover-subtitle {
+  justify-content: flex-start;
+  overflow: visible;
+  padding: 0;
+  color: var(--navy);
+  background: transparent;
+  font-size: clamp(7px, 0.82vw, 12px);
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-align: left;
+}
 
 .scene-street .art-placeholder { background: linear-gradient(155deg, #c5e9e4 0 48%, #8dbab7 49% 51%, #b5cfd0 52%); }
 .scene-street .placeholder-shape, .scene-transit .placeholder-shape { border-radius: 50% 50% 12px 12px; width: 32%; height: 40%; }
@@ -387,6 +433,19 @@ h1 em { color: var(--coral); font-style: normal; }
   box-shadow: inset 0 0 0 3px rgba(241, 109, 92, 0.65);
   transform: none;
 }
+.history-hotspot.is-feature {
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0.8rem;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+}
+.history-hotspot.is-feature:hover, .history-hotspot.is-feature:focus-visible {
+  background: rgba(255, 253, 248, 0.08);
+  box-shadow: inset 0 0 0 3px rgba(241, 109, 92, 0.65);
+  transform: none;
+}
 .has-landmark-hotspot .panel-corner, .has-landmark-hotspot .speech-bubble { z-index: 7; }
 .hotspot-marker {
   display: grid;
@@ -431,6 +490,13 @@ h1 em { color: var(--coral); font-style: normal; }
   width: min(290px, calc(100% - 2rem));
   transform: translateY(5px);
 }
+.history-hotspot.is-feature .history-preview {
+  top: auto;
+  right: 0;
+  bottom: calc(100% + 8px);
+  left: auto;
+  transform: translateY(5px);
+}
 .history-hotspot:hover .history-preview, .history-hotspot:focus-visible .history-preview {
   opacity: 1;
   visibility: visible;
@@ -438,6 +504,8 @@ h1 em { color: var(--coral); font-style: normal; }
 }
 .history-hotspot.is-landmark:hover .history-preview,
 .history-hotspot.is-landmark:focus-visible .history-preview { transform: translateY(0); }
+.history-hotspot.is-feature:hover .history-preview,
+.history-hotspot.is-feature:focus-visible .history-preview { transform: translateY(0); }
 .history-preview-kicker { color: #ab483a; font-size: 0.58rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.12em; }
 .history-preview-title { font-size: 0.92rem; line-height: 1.3; }
 .history-preview-copy { color: #50657a; font-size: 0.75rem; line-height: 1.5; }

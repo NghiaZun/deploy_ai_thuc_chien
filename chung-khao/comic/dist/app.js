@@ -93,23 +93,53 @@
     return layer;
   }
 
-  function createHistoryHotspot(panel) {
-    var history = data.histories[panel.historyId];
-    if (!history || !panel.hotspot) return null;
+  function fitPanelCaptions(root) {
+    if (!root) return;
+    root.querySelectorAll(".panel-caption-box").forEach(function (box) {
+      var copy = box.querySelector("p");
+      var speaker = box.querySelector(".image-caption-speaker");
+      if (!copy || box.clientHeight === 0) return;
 
-    var isLandmark = panel.hotspotKind === "landmark";
-    var hotspot = element("button", "history-hotspot" + (isLandmark ? " is-landmark" : ""));
+      copy.style.fontSize = "";
+      if (speaker) speaker.style.fontSize = "";
+
+      var copySize = parseFloat(window.getComputedStyle(copy).fontSize);
+      var speakerSize = speaker ? parseFloat(window.getComputedStyle(speaker).fontSize) : 0;
+      var attempts = 0;
+      while (box.scrollHeight > box.clientHeight + 1 && copySize > 8 && attempts < 20) {
+        copySize -= 0.5;
+        copy.style.fontSize = copySize + "px";
+        if (speaker) {
+          speakerSize = Math.max(7, speakerSize - 0.25);
+          speaker.style.fontSize = speakerSize + "px";
+        }
+        attempts += 1;
+      }
+    });
+  }
+
+  function createHistoryHotspot(panel, hotspotConfig) {
+    var target = hotspotConfig || panel;
+    var historyId = target.historyId || panel.historyId;
+    var hotspotBox = target.hotspot || panel.hotspot;
+    var hotspotKind = target.hotspotKind || panel.hotspotKind;
+    var history = data.histories[historyId];
+    if (!history || !hotspotBox) return null;
+
+    var isLandmark = hotspotKind === "landmark";
+    var isFeature = hotspotKind === "feature";
+    var hotspot = element("button", "history-hotspot" + (isLandmark ? " is-landmark" : "") + (isFeature ? " is-feature" : ""));
     hotspot.type = "button";
     hotspot.setAttribute("aria-label", "Mở tư liệu về " + history.place + ": " + history.title);
-    hotspot.style.left = panel.hotspot.x + "%";
-    hotspot.style.top = panel.hotspot.y + "%";
-    hotspot.style.width = panel.hotspot.w + "%";
-    hotspot.style.height = panel.hotspot.h + "%";
+    hotspot.style.left = hotspotBox.x + "%";
+    hotspot.style.top = hotspotBox.y + "%";
+    hotspot.style.width = hotspotBox.w + "%";
+    hotspot.style.height = hotspotBox.h + "%";
 
     var marker = element("span", "hotspot-marker");
     marker.setAttribute("aria-hidden", "true");
     marker.textContent = "✧";
-    var cue = element("span", "hotspot-cue", isLandmark ? "Xem tư liệu" : "Khám phá");
+    var cue = element("span", "hotspot-cue", target.cue || (isLandmark ? "Xem tư liệu" : "Khám phá"));
     var preview = element("span", "history-preview");
     preview.setAttribute("aria-hidden", "true");
     preview.appendChild(element("span", "history-preview-kicker", history.place));
@@ -121,7 +151,7 @@
     hotspot.appendChild(cue);
     hotspot.appendChild(preview);
     hotspot.addEventListener("click", function () {
-      openHistory(panel.historyId, hotspot);
+      openHistory(historyId, hotspot);
     });
     return hotspot;
   }
@@ -137,8 +167,8 @@
       var image = element("img", "panel-image");
       image.src = panel.image;
       image.alt = panel.visual;
-      image.loading = "lazy";
-      image.decoding = "async";
+      image.loading = "eager";
+      image.decoding = "auto";
       image.addEventListener("error", function () {
         image.replaceWith(createPlaceholder(panel));
       }, { once: true });
@@ -152,7 +182,11 @@
       if (panel.signBox) setPercentBox(sign, panel.signBox);
       art.appendChild(sign);
     }
-    if (panel.historyId) {
+    if (panel.hotspots && panel.hotspots.length) {
+      panel.hotspots.forEach(function (hotspotConfig) {
+        art.appendChild(createHistoryHotspot(panel, hotspotConfig));
+      });
+    } else if (panel.historyId) {
       art.appendChild(createHistoryHotspot(panel));
     }
     var imageText = createImageText(panel);
@@ -161,7 +195,7 @@
     var corner = element("span", "panel-corner", panel.id);
     corner.setAttribute("aria-hidden", "true");
     var speech = null;
-    if (!panel.captionBox) {
+    if (panel.dialogue && !panel.captionBox) {
       speech = element("div", "speech-bubble");
       speech.appendChild(element("span", "speech-speaker", panel.speaker));
       speech.appendChild(element("p", "", panel.dialogue));
@@ -197,7 +231,7 @@
     headline.appendChild(element("span", "page-chapter", page.chapter));
     headline.appendChild(element("h3", "", page.title));
     header.appendChild(headline);
-    header.appendChild(element("span", "page-stamp", String(page.number).padStart(2, "0") + " / 09"));
+    header.appendChild(element("span", "page-stamp", String(page.number).padStart(2, "0") + " / " + String(data.pages.length).padStart(2, "0")));
     section.appendChild(header);
     section.appendChild(element("p", "page-note", page.note));
 
@@ -275,6 +309,10 @@
     previousButton.disabled = number === 1;
     nextButton.disabled = number === data.pages.length;
     nextButton.innerHTML = number === data.pages.length ? "Đã hết truyện <span aria-hidden='true'>✓</span>" : "Trang tiếp <span aria-hidden='true'>→</span>";
+
+    window.requestAnimationFrame(function () {
+      fitPanelCaptions(pageElements[number - 1]);
+    });
 
     if (scrollToReader) {
       document.querySelector(".reader").scrollIntoView({
@@ -454,6 +492,11 @@
   previousButton.addEventListener("click", function () { navigateTo(activePage - 1); });
   nextButton.addEventListener("click", function () { navigateTo(activePage + 1); });
   window.addEventListener("hashchange", function () { showPage(pageFromHash(), true); });
+  window.addEventListener("resize", function () {
+    window.requestAnimationFrame(function () {
+      fitPanelCaptions(pageElements[activePage - 1]);
+    });
+  });
   window.addEventListener("beforeprint", stopAudio);
 
   document.addEventListener("keydown", function (event) {

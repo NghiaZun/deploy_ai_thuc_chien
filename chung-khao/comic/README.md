@@ -17,7 +17,7 @@ Files:
 
 ## Panel art and dialogue
 
-The P01A–P09C image values point to local files under dist/assets/images/. Dialogue remains in dist/story-data.js and is positioned over each image with captionBox percentages measured from the top-left of the 16:9 artwork. This keeps Vietnamese text crisp and selectable. The P07B vector artwork is an original, text-free diagram linking the three clue objects.
+The P01A–P09C image values point to local files under dist/assets/images/. Dialogue remains in dist/story-data.js and is positioned over each image with captionBox percentages measured from the top-left of the 16:9 artwork. This keeps Vietnamese text crisp and selectable. The P02A and P06B overlays replace stray English lettering with Vietnamese. The P07B vector artwork is an original, text-free diagram linking the three clue objects.
 
 Keep panel IDs and the visual description when replacing an illustration. The visual description becomes its alternative text. Images fill their frames with object-fit: cover, so keep important characters and objects away from crop edges. The artHint appears only while an image is missing or fails to load.
 
