@@ -162,7 +162,7 @@ window.COMIC_DATA = {
       title: "Câu chuyện được trao tiếp",
       note: "Chiếc hộp trở lại, rồi bắt đầu một hành trình mới.",
       panels: [
-        { id: "P09A", size: "wide", scene: "return", image: "./assets/images/P09A-return-box.webp", visual: "Bác An mặc áo ngũ thân nhẹ nhõm nhận lại chiếc hộp từ Trung", artHint: "Chiếc hộp trở về với bác An", speaker: "Bác An", dialogue: "Cảm ơn các cháu. Bác định mang nó tới lớp học.", captionBox: { x: 69, y: 2, w: 29, h: 18, compact: true, variant: "bubble" } },
+        { id: "P09A", size: "wide", scene: "return", image: "./assets/images/P09A-thank-class.webp", visual: "Bác An mặc áo ngũ thân ôm chiếc hộp trước ngực, nhẹ nhõm cảm ơn Hoa, Trung và Mây", artHint: "Bác An sẽ mang chiếc hộp tới lớp học", speaker: "Bác An", dialogue: "Cảm ơn các cháu. Bác định mang nó tới lớp học.", captionBox: { x: 69, y: 2, w: 29, h: 18, compact: true, variant: "bubble" } },
         { id: "P09B", size: "half", scene: "gift", image: "./assets/images/P09B-gift-hoa.webp", visual: "Bác An mặc áo ngũ thân trìu mến trao chiếc hộp bản sao cho Hoa", artHint: "Bác An trao hộp bản sao cho Hoa", speaker: "Bác An", dialogue: "Bác tặng cháu hộp này. Hãy kể tiếp cho các bạn nhé.", captionBox: { x: 69, y: 2, w: 29, h: 21, compact: true, variant: "bubble" } },
         { id: "P09C", size: "half", scene: "future", image: "./assets/images/P09C-new-memory.webp", visual: "Hoa thêm hạt ký ức hình lá sen năm 2121 vào hộp trước các bạn học", artHint: "Hoa để lại dấu vết của ngày mai", speaker: "Hoa", dialogue: "Đến lượt chúng mình để lại một điều đáng nhớ.", captionBox: { x: 2, y: 80, w: 96, h: 18, compact: true, hideSpeaker: true, variant: "bubble" } }
       ]
